@@ -1,4 +1,3 @@
-
 <html>
 <head>
 <?php
@@ -14,6 +13,19 @@ session_start();
 	<input type="submit" value="Submit">
 </form>
 
+<?php
+if(!isset($_SESSION['entries'])){
+	$_SESSION['entries'] = array();
+}
+if(isset($_GET["entry"])){
+	$temp = htmlentities($_GET["entry"]);
+}
+if(isset($temp) && !empty($temp)){
+	$entries = &$_SESSION['entries'];
+	$entries []= $temp;
+}
+?>
+
 <form action="<?php print($_SERVER['SCRIPT_NAME'])?>" method="get">
 	<input type="button" value="Save" onclick=<?php 
 	$fh = fopen("entries.json", 'w');
@@ -28,25 +40,10 @@ session_start();
 </form>
 
 <?php
-
-if(!isset($_SESSION['entries'])){
-	$_SESSION['entries'] = array();
-}
-if(isset($_GET["entry"])){
-	$temp = htmlentities($_GET["entry"]);
-}
-
-if(isset($temp) && !empty($temp)){
-	$entries = &$_SESSION['entries'];
-	$entries []= $temp;
-}
-
 foreach(array_reverse($_SESSION['entries']) as $entry){
 	echo $entry;
 	echo "<br>";
 }
-
-
 ?>
 
 </body>
