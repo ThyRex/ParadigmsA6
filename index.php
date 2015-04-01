@@ -15,7 +15,16 @@ session_start();
 </form>
 
 <form action="<?php print($_SERVER['SCRIPT_NAME'])?>" method="get">
-	<input type="submit" value="Save">
+	<input type="button" value="Save" onclick=<?php 
+	$fh = fopen("entries.json", 'w');
+	if($fh === false)
+		die("Failed to open entries.json for writing.");
+	else
+	{
+		fwrite($fh, json_encode($entries));
+		fclose($fh);
+	} ?>
+>
 </form>
 
 <?php
@@ -36,24 +45,6 @@ foreach(array_reverse($_SESSION['entries']) as $entry){
 	echo $entry;
 	echo "<br>";
 }
-
-// Saving data from form in text file in JSON format
-// From: http://coursesweb.net/php-mysql/
-
-// check if all form data are submited, else output error message
-if(isset($_GET["entry"])) {
-
-    // adds form data into an array
-   $fh = fopen("entries.json", 'w');
-	if($fh === false)
-		die("Failed to open entries.json for writing.");
-	else{
-		fwrite($fh, json_encode($entries));
-		fclose($fh);
-	}
-}
-
-
 
 
 ?>
